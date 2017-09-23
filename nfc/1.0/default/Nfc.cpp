@@ -83,10 +83,6 @@ INfc* HIDL_FETCH_INfc(const char * /*name*/) {
     const hw_module_t* hw_module = nullptr;
 
     ret = hw_get_module (NFC_NCI_HARDWARE_MODULE_ID, &hw_module);
-    if (ret != 0) {
-        //Try BCM hal ID
-        ret = hw_get_module (NFC_NCI_BCM2079X_HARDWARE_MODULE_ID, &hw_module);
-    }
     if (ret == 0) {
         ret = nfc_nci_open (hw_module, &nfc_device);
         if (ret != 0) {
@@ -94,7 +90,7 @@ INfc* HIDL_FETCH_INfc(const char * /*name*/) {
         }
     }
     else
-        ALOGE ("hw_get_module %s or %s failed: %d", NFC_NCI_HARDWARE_MODULE_ID, NFC_NCI_BCM2079X_HARDWARE_MODULE_ID, ret);
+        ALOGE ("hw_get_module %s failed: %d", NFC_NCI_HARDWARE_MODULE_ID, ret);
 
     if (ret == 0) {
         return new Nfc(nfc_device);
